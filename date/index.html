@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Пойдёшь на свидание?</title>
+<meta name="description" content="У меня к тебе очень важный вопрос 💌">
+<meta name="theme-color" content="#ff5c8a">
+<meta property="og:type" content="website">
+<meta property="og:title" content="💌 У меня к тебе важный вопрос…">
+<meta property="og:description" content="Открой, только честно отвечай 🙈">
+<meta property="og:image" content="https://mirolimdeveloper.github.io/date/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💌</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#ffe3ec; --bg2:#ffd0e0; --card:#ffffff; --ink:#3a1f2b; --muted:#8a6173;
+  --pink:#ff5c8a; --pink-d:#e63e70; --soft:#fff0f5; --line:#ffd3e1; --green:#29c46f;
+  --shadow:0 20px 50px -20px rgba(230,62,112,.45);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:Nunito,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);
+  background:radial-gradient(1200px 600px at 10% -10%,#fff5f8 0,transparent 60%),linear-gradient(160deg,var(--bg1),var(--bg2));
+  min-height:100vh;min-height:100dvh;overflow-x:hidden;
+}
+.bg-hearts{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-hearts span{position:absolute;bottom:-40px;font-size:22px;opacity:.35;animation:rise linear infinite}
+@keyframes rise{to{transform:translateY(-115vh) rotate(25deg)}}
+main{position:relative;z-index:1;min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px 16px}
+.screen{display:none;width:100%;max-width:460px}
+.screen.on{display:block;animation:pop .45s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{opacity:0;transform:scale(.92) translateY(10px)}to{opacity:1;transform:none}}
+.card{background:var(--card);border-radius:28px;padding:28px 22px;box-shadow:var(--shadow);text-align:center}
+h1{font-size:clamp(24px,6.5vw,32px);line-height:1.15;margin:8px 0 10px;font-weight:900}
+h2{font-size:22px;margin:6px 0 6px;font-weight:900}
+p{margin:0 0 14px;color:var(--muted);font-weight:600;line-height:1.45}
+.emoji{font-size:84px;line-height:1;display:inline-block;animation:bob 2.2s ease-in-out infinite;user-select:none}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-4deg)}}
+.btn{font:inherit;font-weight:800;font-size:18px;border:0;border-radius:999px;padding:14px 28px;cursor:pointer;
+  transition:transform .2s,background .2s,box-shadow .2s;touch-action:manipulation;user-select:none}
+.btn:active{transform:scale(.96)}
+.btn-yes{background:var(--pink);color:#fff;box-shadow:0 10px 24px -8px var(--pink)}
+.btn-yes:hover{background:var(--pink-d)}
+.btn-no{background:#f1e6ea;color:var(--muted)}
+.btn-ghost{background:var(--soft);color:var(--pink-d)}
+.btn-block{width:100%}
+.row{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:18px;min-height:64px}
+#yesBtn{transition:transform .35s cubic-bezier(.2,1.4,.4,1);transform-origin:center}
+#noBtn.flying{position:fixed;z-index:50;transition:left .28s cubic-bezier(.2,1.2,.4,1),top .28s cubic-bezier(.2,1.2,.4,1),transform .2s}
+.hint{font-size:14px;min-height:20px;color:var(--pink-d);font-weight:800;margin-top:12px}
+label.f{display:block;text-align:left;font-weight:800;font-size:14px;margin:12px 0 6px}
+input.in{width:100%;font:inherit;font-size:17px;font-weight:700;padding:13px 16px;border-radius:16px;border:2px solid var(--line);outline:none;background:var(--soft);color:var(--ink)}
+input.in:focus{border-color:var(--pink)}
+.opt-note{font-weight:600;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0 4px}
+.chip{font:inherit;font-weight:800;font-size:15px;border:2px solid var(--line);background:#fff;color:var(--ink);padding:10px 14px;border-radius:14px;cursor:pointer;transition:.15s}
+.chip.sel{background:var(--pink);border-color:var(--pink);color:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px}
+.tile{font:inherit;border:2px solid var(--line);background:#fff;border-radius:18px;padding:14px 8px;cursor:pointer;font-weight:800;font-size:15px;color:var(--ink);transition:.15s;display:flex;flex-direction:column;align-items:center;gap:6px}
+.tile b{font-size:30px;line-height:1}
+.tile.sel{border-color:var(--pink);background:var(--soft);box-shadow:0 0 0 3px rgba(255,92,138,.18)}
+.shake{animation:shake .45s}
+@keyframes shake{20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.steps{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
+.steps i{width:28px;height:6px;border-radius:9px;background:var(--line)}
+.steps i.on{background:var(--pink)}
+input[type=range]{width:100%;accent-color:var(--pink);margin:14px 0 6px;height:28px}
+.big{font-size:44px;font-weight:900;color:var(--pink)}
+.ticket{background:var(--soft);border:2px dashed var(--pink);border-radius:20px;padding:16px;text-align:left;margin:14px 0}
+.ticket div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-weight:700}
+.ticket div:last-child{border:0}
+.ticket span{color:var(--muted)}
+.ticket strong{text-align:right}
+.stack{display:grid;gap:10px;margin-top:10px}
+.small{font-size:13px;color:var(--muted);font-weight:700;margin-top:14px}
+.small a{color:var(--pink-d)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:800;z-index:100;transition:transform .3s;max-width:calc(100% - 32px);text-align:center}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.burst{position:fixed;pointer-events:none;z-index:90;font-size:26px;will-change:transform,opacity}
+.linkbox{word-break:break-all;background:var(--soft);border-radius:14px;padding:12px;font-size:13px;font-weight:700;text-align:left;color:var(--ink);margin:12px 0}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="bg-hearts" id="bgHearts" aria-hidden="true"></div>
+<main>
+
+  <!-- 0. Конструктор ссылки -->
+  <section class="screen" id="s-create">
+    <div class="card">
+      <div class="emoji">💌</div>
+      <h1>Позови её на свидание</h1>
+      <p>Заполни поля, и ты получишь ссылку. Отправь её, и пусть попробует нажать «Нет» 😏</p>
+      <label class="f" for="cTo">Её имя</label>
+      <input class="in" id="cTo" maxlength="30" placeholder="Например, Аня" autocomplete="off">
+      <label class="f" for="cFrom">Твоё имя</label>
+      <input class="in" id="cFrom" maxlength="30" placeholder="Например, Саша" autocomplete="off">
+      <label class="f" for="cTg">Твой Telegram <span class="opt-note">(необязательно)</span></label>
+      <input class="in" id="cTg" maxlength="40" placeholder="@username" autocomplete="off">
+      <div class="stack" style="margin-top:18px">
+        <button class="btn btn-yes btn-block" id="makeLink">Создать ссылку ✨</button>
+      </div>
+      <div id="linkOut" hidden>
+        <div class="linkbox" id="linkText"></div>
+        <div class="stack">
+          <button class="btn btn-yes btn-block" id="shareLink">Отправить ей 💘</button>
+          <button class="btn btn-ghost btn-block" id="copyLink">Скопировать ссылку</button>
+          <button class="btn btn-ghost btn-block" id="previewLink">Посмотреть, как она увидит 👀</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. Вопрос -->
+  <section class="screen" id="s-ask">
+    <div class="card" id="askCard">
+      <div class="emoji" id="askEmoji">🥺</div>
+      <h1 id="askTitle">Пойдёшь со мной на свидание?</h1>
+      <p id="askSub">Только честно 👉👈</p>
+      <div class="row" id="btnRow">
+        <button class="btn btn-yes" id="yesBtn">Да 💖</button>
+        <button class="btn btn-no" id="noBtn">Нет</button>
+      </div>
+      <div class="hint" id="noHint"></div>
+    </div>
+  </section>
+
+  <!-- 2. Ура -->
+  <section class="screen" id="s-yay">
+    <div class="card">
+      <div class="emoji">🥳</div>
+      <h1 id="yayTitle">УРААА! Я так и знал! 💃</h1>
+      <p>Осталось чуть-чуть: выберем, когда и куда пойдём</p>
+      <button class="btn btn-yes btn-block" data-go="date">Погнали 🚀</button>
+    </div>
+  </section>
+
+  <!-- 3. Дата -->
+  <section class="screen" id="s-date">
+    <div class="card">
+      <div class="steps"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <div class="emoji">📅</div>
+      <h2>Когда тебе удобно?</h2>
+      <div class="chips" id="dateChips">
+        <button class="chip" data-d="0">Сегодня</button>
+        <button class="chip" data-d="1">Завтра</button>
+        <button class="chip" data-d="weekend">В выходные</button>
+        <button class="chip" data-joke="year">Через год</button>
+      </div>
+      <label class="f" for="dateIn">или выбери сама:</label>
+      <input class="in" type="date" id="dateIn">
+      <div class="hint" id="dateHint"></div>
+      <button class="btn btn-yes btn-block" id="dateNext" style="margin-top:12px">Дальше →</button>
+    </div>
+  </section>
+
+  <!-- 4. Время -->
+  <section class="screen" id="s-time">
+    <div class="card">
+      <div class="steps"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+      <div class="emoji">⏰</div>
+      <h2>Во сколько?</h2>
+      <div class="chips" id="timeChips">
+        <button class="chip" data-t="12:00">12:00</button>
+        <button class="chip" data-t="15:00">15:00</button>
+        <button class="chip" data-t="18:00">18:00</button>
+        <button class="chip" data-t="19:30">19:30</button>
+        <button class="chip" data-t="21:00">21:00</button>
+        <button class="chip" data-joke="6am">06:00 🌅</button>
+      </div>
+      <div class="hint" id="timeHint"></div>
+      <button class="btn btn-yes btn-block" id="timeNext" style="margin-top:12px">Дальше →</button>
+    </div>
+  </section>
+
+  <!-- 5. Чем займёмся -->
+  <section class="screen" id="s-act">
+    <div class="card">
+      <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+      <div class="emoji">🎡</div>
+      <h2>Чем займёмся?</h2>
+      <p>Можно выбрать несколько</p>
+      <div class="grid" id="actGrid">
+        <button class="tile" data-v="Кино"><b>🍿</b>Кино</button>
+        <button class="tile" data-v="Прогулка"><b>🌇</b>Прогулка</button>
+        <button class="tile" data-v="Кафе"><b>☕</b>Кафе</button>
+        <button class="tile" data-v="Боулинг"><b>🎳</b>Боулинг</button>
+        <button class="tile" data-v="Парк аттракционов"><b>🎢</b>Аттракционы</button>
+        <button class="tile" data-v="Сюрприз"><b>🎁</b>Сюрприз</button>
+      </div>
+      <div class="hint" id="actHint"></div>
+      <button class="btn btn-yes btn-block" id="actNext" style="margin-top:12px">Дальше →</button>
+    </div>
+  </section>
+
+  <!-- 6. Еда -->
+  <section class="screen" id="s-food">
+    <div class="card">
+      <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+      <div class="emoji">🍽️</div>
+      <h2>Что будем есть?</h2>
+      <div class="grid" id="foodGrid">
+        <button class="tile" data-v="Суши"><b>🍣</b>Суши</button>
+        <button class="tile" data-v="Пицца"><b>🍕</b>Пицца</button>
+        <button class="tile" data-v="Бургеры"><b>🍔</b>Бургеры</button>
+        <button class="tile" data-v="Плов"><b>🍚</b>Плов</button>
+        <button class="tile" data-v="Десерты"><b>🍰</b>Десерты</button>
+        <button class="tile" data-joke="hungry"><b>🙅‍♀️</b>Я не голодна</button>
+      </div>
+      <div class="hint" id="foodHint"></div>
+      <button class="btn btn-yes btn-block" id="foodNext" style="margin-top:12px">Дальше →</button>
+    </div>
+  </section>
+
+  <!-- 7. Насколько ждёшь -->
+  <section class="screen" id="s-mood">
+    <div class="card">
+      <div class="steps"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+      <div class="emoji" id="moodEmoji">😊</div>
+      <h2>Как сильно ты ждёшь свидания?</h2>
+      <div class="big"><span id="moodVal">80</span>%</div>
+      <input type="range" min="0" max="100" value="80" id="moodIn" aria-label="Насколько ждёшь">
+      <div class="hint" id="moodHint"></div>
+      <button class="btn btn-yes btn-block" id="moodNext" style="margin-top:12px">Готово 💘</button>
+    </div>
+  </section>
+
+  <!-- 8. Итог -->
+  <section class="screen" id="s-done">
+    <div class="card">
+      <div class="emoji">💘</div>
+      <h1>Свидание назначено!</h1>
+      <p id="doneSub">Осталось отправить ответ</p>
+      <div class="ticket" id="ticket"></div>
+      <div class="stack">
+        <button class="btn btn-yes btn-block" id="sendTg">Отправить ответ в Telegram ✈️</button>
+        <button class="btn btn-ghost btn-block" id="shareAns">Поделиться ответом</button>
+        <button class="btn btn-ghost btn-block" id="addCal">Добавить в календарь 📅</button>
+      </div>
+      <div class="small">Хочешь позвать кого-то так же? <a href="./">Сделай свою ссылку</a></div>
+    </div>
+  </section>
+
+</main>
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const $$ = s => [...document.querySelectorAll(s)];
+  const BASE = location.origin + location.pathname;
+
+  /* ---------- данные из ссылки ---------- */
+  const enc = o => {
+    const b = new TextEncoder().encode(JSON.stringify(o));
+    let s = ''; b.forEach(x => s += String.fromCharCode(x));
+    return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  };
+  const dec = str => {
+    try {
+      const s = atob(str.replace(/-/g,'+').replace(/_/g,'/'));
+      return JSON.parse(new TextDecoder().decode(Uint8Array.from(s, c => c.charCodeAt(0))));
+    } catch { return null; }
+  };
+  const params = new URLSearchParams(location.search);
+  const data = params.get('d') ? dec(params.get('d')) : (params.has('demo') ? {} : null);
+  const clean = s => String(s || '').trim().slice(0, 40);
+  const toName = clean(data && data.to);
+  const fromName = clean(data && data.from);
+  const tg = clean(data && data.tg).replace(/^@/, '').replace(/[^\w]/g, '');
+
+  /* ---------- утилиты ---------- */
+  const toastEl = $('#toast'); let toastT;
+  const toast = m => { toastEl.textContent = m; toastEl.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove('on'), 2600); };
+  const shake = el => { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); };
+  const show = id => { $$('.screen').forEach(s => s.classList.remove('on')); $('#s-' + id).classList.add('on'); window.scrollTo(0, 0); };
+  const copy = async t => {
+    try { await navigator.clipboard.writeText(t); return true; }
+    catch {
+      const ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch {}
+      ta.remove(); return ok;
+    }
+  };
+  const burst = (x, y, n = 28, set = ['💖','💕','💘','✨','💗','🌸']) => {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    for (let i = 0; i < n; i++) {
+      const e = document.createElement('div'); e.className = 'burst';
+      e.textContent = set[i % set.length];
+      e.style.left = x + 'px'; e.style.top = y + 'px';
+      document.body.appendChild(e);
+      const a = Math.random() * Math.PI * 2, d = 120 + Math.random() * 260;
+      e.animate([
+        { transform: 'translate(-50%,-50%) scale(.4)', opacity: 1 },
+        { transform: `translate(calc(-50% + ${Math.cos(a)*d}px), calc(-50% + ${Math.sin(a)*d - 80}px)) scale(${0.8 + Math.random()}) rotate(${Math.random()*90-45}deg)`, opacity: 0 }
+      ], { duration: 1100 + Math.random() * 700, easing: 'cubic-bezier(.1,.8,.3,1)' }).onfinish = () => e.remove();
+    }
+  };
+
+  /* фон с сердечками */
+  (() => {
+    const box = $('#bgHearts'); const set = ['💗','💕','💖','🌸','💘'];
+    for (let i = 0; i < 16; i++) {
+      const s = document.createElement('span'); s.textContent = set[i % set.length];
+      s.style.left = Math.random() * 100 + '%';
+      s.style.fontSize = 14 + Math.random() * 20 + 'px';
+      s.style.animationDuration = 9 + Math.random() * 12 + 's';
+      s.style.animationDelay = -Math.random() * 20 + 's';
+      box.appendChild(s);
+    }
+  })();
+
+  /* ---------- 0. Конструктор ---------- */
+  let madeLink = '';
+  $('#makeLink').onclick = () => {
+    const to = clean($('#cTo').value);
+    if (!to) { shake($('#cTo')); $('#cTo').focus(); toast('Напиши её имя 🙂'); return; }
+    madeLink = BASE + '?d=' + enc({ to, from: clean($('#cFrom').value), tg: clean($('#cTg').value) });
+    $('#linkText').textContent = madeLink;
+    $('#linkOut').hidden = false;
+    const r = $('#makeLink').getBoundingClientRect(); burst(r.left + r.width / 2, r.top, 18);
+  };
+  $('#copyLink').onclick = async () => toast(await copy(madeLink) ? 'Ссылка скопирована 📋' : 'Не получилось скопировать, выдели ссылку вручную');
+  $('#previewLink').onclick = () => window.open(madeLink, '_blank');
+  $('#shareLink').onclick = async () => {
+    const text = 'У меня к тебе важный вопрос… 💌';
+    if (navigator.share) { try { await navigator.share({ title: '💌', text, url: madeLink }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+    window.open('https://t.me/share/url?url=' + encodeURIComponent(madeLink) + '&text=' + encodeURIComponent(text), '_blank');
+  };
+
+  /* ---------- 1. Вопрос + убегающая «Нет» ---------- */
+  if (toName) $('#askTitle').textContent = `${toName}, пойдёшь со мной на свидание?`;
+  if (fromName) $('#askSub').textContent = `Спрашивает ${fromName}. Только честно 👉👈`;
+
+  const yesBtn = $('#yesBtn'), noBtn = $('#noBtn');
+  const noTexts = ['Нет', 'Ты уверена?', 'Точно-точно?', 'Подумай ещё 🥺', 'Не-а, мимо 😜', 'Я сейчас заплачу 😭', 'Ну пожалуйста 🙏', 'Последний шанс!', 'Неправильная кнопка', 'Кнопка устала 😮‍💨', 'Ладно, сдаюсь…'];
+  const hints = ['', 'Хм, кажется, промахнулась 🤔', 'Кнопка «Нет» стесняется 🙈', 'Она от тебя убегает 🏃‍♀️', 'Может, всё-таки «Да»? 👀', 'Кнопка «Да» уже растёт 💪', 'Ты упорная, мне нравится 😏', 'Сопротивление бесполезно 🤖', 'Я могу так весь день 😌', 'Ну правда, жми «Да» 💖', 'Кнопка «Нет» уехала в отпуск 🏖️'];
+  const faces = ['🥺', '😳', '😟', '😢', '😭', '🥹', '😿', '💔', '🙏', '😵‍💫', '🫠'];
+  let tries = 0, lastDodge = 0;
+
+  const placeNo = () => {
+    const vw = window.innerWidth, vh = window.innerHeight, pad = 16;
+    const w = noBtn.offsetWidth, h = noBtn.offsetHeight;
+    const y = yesBtn.getBoundingClientRect();
+    let x, t, ok = false;
+    for (let i = 0; i < 40 && !ok; i++) {
+      x = pad + Math.random() * Math.max(1, vw - w - pad * 2);
+      t = pad + Math.random() * Math.max(1, vh - h - pad * 2);
+      ok = x + w < y.left - 12 || x > y.right + 12 || t + h < y.top - 12 || t > y.bottom + 12;
+    }
+    noBtn.style.left = x + 'px'; noBtn.style.top = t + 'px';
+  };
+
+  const dodge = e => {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    const now = Date.now(); if (now - lastDodge < 120) return; lastDodge = now;
+    tries++;
+    if (!noBtn.classList.contains('flying')) {
+      const r = noBtn.getBoundingClientRect();
+      const ph = document.createElement('span');               // держим место, чтобы «Да» не прыгала
+      ph.style.cssText = `display:inline-block;width:${r.width}px;height:${r.height}px`;
+      noBtn.after(ph);
+      noBtn.style.left = r.left + 'px'; noBtn.style.top = r.top + 'px';
+      noBtn.classList.add('flying');
+      void noBtn.offsetWidth;
+    }
+    const i = Math.min(tries, noTexts.length - 1);
+    noBtn.textContent = noTexts[i];
+    $('#noHint').textContent = hints[Math.min(tries, hints.length - 1)];
+    $('#askEmoji').textContent = faces[Math.min(tries, faces.length - 1)];
+    yesBtn.style.transform = `scale(${Math.min(1 + tries * 0.15, 2.3)})`;
+    noBtn.style.transform = `scale(${Math.max(1 - tries * 0.05, 0.55)})`;
+    if (tries >= noTexts.length) {               // «Нет» сдаётся и исчезает
+      noBtn.style.transition = 'opacity .4s, transform .4s';
+      noBtn.style.opacity = '0'; noBtn.style.transform = 'scale(0)';
+      setTimeout(() => noBtn.remove(), 450);
+      return;
+    }
+    placeNo();
+  };
+  noBtn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') dodge(e); });
+  noBtn.addEventListener('pointerdown', dodge);
+  noBtn.addEventListener('touchstart', dodge, { passive: false });
+  noBtn.addEventListener('click', dodge);
+  noBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') dodge(e); });
+  window.addEventListener('resize', () => { if (noBtn.isConnected && noBtn.classList.contains('flying')) placeNo(); });
+
+  yesBtn.onclick = () => {
+    const r = yesBtn.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2, 40);
+    if (noBtn.isConnected) noBtn.remove();
+    if (fromName) $('#yayTitle').textContent = `УРААА! ${fromName} так и знал 💃`;
+    setTimeout(() => show('yay'), 350);
+  };
+  $$('[data-go]').forEach(b => b.onclick = () => show(b.dataset.go));
+
+  /* ---------- состояние ответа ---------- */
+  const ans = { date: '', time: '', acts: [], food: [], mood: 80 };
+  const pad2 = n => String(n).padStart(2, '0');
+  const iso = d => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+  const human = s => new Date(s + 'T12:00').toLocaleDateString('ru-RU', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  /* ---------- 3. Дата ---------- */
+  const dateIn = $('#dateIn'); const today = new Date();
+  dateIn.min = iso(today);
+  const setDate = (v, chip) => {
+    ans.date = v; dateIn.value = v;
+    $$('#dateChips .chip').forEach(c => c.classList.toggle('sel', c === chip));
+    $('#dateHint').textContent = v ? 'Отлично, ' + human(v) + ' ✍️' : '';
+  };
+  $$('#dateChips .chip').forEach(c => c.onclick = () => {
+    if (c.dataset.joke) { shake(c); $('#dateHint').textContent = 'Через год?! Я столько не выдержу 😤'; return; }
+    const d = new Date();
+    if (c.dataset.d === 'weekend') { const w = d.getDay(); d.setDate(d.getDate() + (w === 0 || w === 6 ? 0 : 6 - w)); }
+    else d.setDate(d.getDate() + +c.dataset.d);
+    setDate(iso(d), c);
+  });
+  dateIn.onchange = () => {
+    if (dateIn.value && dateIn.value < dateIn.min) { setDate('', null); $('#dateHint').textContent = 'В прошлое пока нельзя 🕰️'; return; }
+    setDate(dateIn.value, null);
+  };
+  $('#dateNext').onclick = () => { if (!ans.date) { shake($('#dateChips')); $('#dateHint').textContent = 'Выбери дату 🙏'; return; } show('time'); };
+
+  /* ---------- 4. Время ---------- */
+  $$('#timeChips .chip').forEach(c => c.onclick = () => {
+    if (c.dataset.joke) { shake(c); $('#timeHint').textContent = 'В 6 утра?! Я буду спать как суслик 😴'; return; }
+    ans.time = c.dataset.t;
+    $$('#timeChips .chip').forEach(x => x.classList.toggle('sel', x === c));
+    $('#timeHint').textContent = ans.time === '21:00' ? 'Вечерняя романтика 🌙' : 'Записал ✍️';
+  });
+  $('#timeNext').onclick = () => { if (!ans.time) { shake($('#timeChips')); $('#timeHint').textContent = 'Выбери время ⏰'; return; } show('act'); };
+
+  /* ---------- 5/6. Мультивыбор ---------- */
+  const multi = (gridSel, key, hintSel, joke) => {
+    $$(gridSel + ' .tile').forEach(t => t.onclick = () => {
+      if (t.dataset.joke) { joke(t); return; }
+      t.classList.toggle('sel');
+      ans[key] = $$(gridSel + ' .tile.sel').map(x => x.dataset.v);
+      $(hintSel).textContent = ans[key].length ? 'Выбрано: ' + ans[key].join(', ') : '';
+    });
+  };
+  multi('#actGrid', 'acts', '#actHint');
+  multi('#foodGrid', 'food', '#foodHint', t => {
+    shake(t);
+    $('#foodHint').textContent = 'Не верю 😏 Добавил десерты на всякий случай';
+    const d = $('#foodGrid [data-v="Десерты"]'); d.classList.add('sel');
+    ans.food = $$('#foodGrid .tile.sel').map(x => x.dataset.v);
+  });
+  $('#actNext').onclick = () => { if (!ans.acts.length) { shake($('#actGrid')); $('#actHint').textContent = 'Выбери хотя бы одно 🎈'; return; } show('food'); };
+  $('#foodNext').onclick = () => { if (!ans.food.length) { shake($('#foodGrid')); $('#foodHint').textContent = 'Голодными не пойдём 🍕'; return; } show('mood'); };
+
+  /* ---------- 7. Шкала «насколько ждёшь» (ниже 70 нельзя 😏) ---------- */
+  const moodIn = $('#moodIn');
+  const moodFace = v => v >= 100 ? '🤩' : v >= 90 ? '😍' : v >= 80 ? '😊' : '🙂';
+  const updMood = () => { const v = +moodIn.value; ans.mood = v; $('#moodVal').textContent = v; $('#moodEmoji').textContent = moodFace(v); $('#moodHint').textContent = v === 100 ? 'Вот это я понимаю! 🔥' : ''; };
+  moodIn.addEventListener('input', () => {
+    if (+moodIn.value < 70) { moodIn.value = 70 + Math.round(Math.random() * 25); $('#moodHint').textContent = 'Ой, ползунок сломался… в другую сторону 🤷'; shake($('#moodIn')); ans.mood = +moodIn.value; $('#moodVal').textContent = moodIn.value; return; }
+    updMood();
+  });
+  $('#moodNext').onclick = () => { buildDone(); show('done'); burst(innerWidth / 2, innerHeight / 3, 50); };
+
+  /* ---------- 8. Итог ---------- */
+  const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const answerText = () =>
+    `💘 ${toName ? toName + ' говорит' : 'Мой ответ'}: ДА!\n` +
+    `📅 Дата: ${human(ans.date)}\n⏰ Время: ${ans.time}\n🎡 Занятие: ${ans.acts.join(', ')}\n🍽️ Еда: ${ans.food.join(', ')}\n` +
+    `🔥 Жду на ${ans.mood}%`;
+  const buildDone = () => {
+    if (fromName) $('#doneSub').textContent = `Отправь ответ, ${fromName} уже ждёт 😎`;
+    const rows = [['Дата', human(ans.date)], ['Время', ans.time], ['Занятие', ans.acts.join(', ')], ['Еда', ans.food.join(', ')], ['Жду на', ans.mood + '%']];
+    $('#ticket').innerHTML = rows.map(([k, v]) => `<div><span>${k}</span><strong>${esc(String(v))}</strong></div>`).join('');
+    if (!tg) $('#sendTg').textContent = 'Отправить ответ ✈️';
+  };
+  $('#sendTg').onclick = async () => {
+    const text = answerText();
+    if (tg) {
+      await copy(text);
+      toast('Ответ скопирован, вставь его в чат 💬');
+      setTimeout(() => location.href = 'https://t.me/' + tg, 900);
+    } else {
+      window.open('https://t.me/share/url?url=' + encodeURIComponent(BASE) + '&text=' + encodeURIComponent(text), '_blank');
+    }
+  };
+  $('#shareAns').onclick = async () => {
+    const text = answerText();
+    if (navigator.share) { try { await navigator.share({ text }); return; } catch (e) { if (e.name === 'AbortError') return; } }
+    toast(await copy(text) ? 'Ответ скопирован 📋' : 'Не получилось скопировать');
+  };
+  $('#addCal').onclick = () => {
+    const [h, m] = ans.time.split(':').map(Number);
+    const st = new Date(ans.date + 'T00:00'); st.setHours(h, m);
+    const en = new Date(st.getTime() + 3 * 3600e3);
+    const f = d => `${d.getFullYear()}${pad2(d.getMonth()+1)}${pad2(d.getDate())}T${pad2(d.getHours())}${pad2(d.getMinutes())}00`;
+    const title = 'Свидание' + (fromName ? ' с ' + fromName : '') + ' 💘';
+    const ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//date//RU','BEGIN:VEVENT',
+      'UID:' + Date.now() + '@date', 'DTSTAMP:' + f(new Date()), 'DTSTART:' + f(st), 'DTEND:' + f(en),
+      'SUMMARY:' + title, 'DESCRIPTION:' + (ans.acts.join(', ') + ' / ' + ans.food.join(', ')).replace(/,/g, '\\,'),
+      'BEGIN:VALARM','TRIGGER:-PT2H','ACTION:DISPLAY','DESCRIPTION:' + title,'END:VALARM',
+      'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
+    a.download = 'svidanie.ics'; a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  };
+
+  /* ---------- старт ---------- */
+  show(data ? 'ask' : 'create');
+})();
+</script>
+</body>
+</html>
